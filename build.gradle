@@ -1,0 +1,112 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'signing'
+    id 'org.springframework.boot' version '3.4.1' apply false
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'pl.allegro.tech.build.axion-release' version '1.18.16'
+    id 'com.diffplug.spotless' version '7.0.0.BETA4'
+}
+
+scmVersion {
+    tag {
+        prefix.set("")
+    }
+}
+
+group = 'io.github.gadnex'
+version = scmVersion.version
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withJavadocJar()
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'gg.jte:jte-spring-boot-starter-3:3.1.16'
+    annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'io.github.gadnex'
+            artifactId = 'jte-datastar-spring-boot-starter'
+
+            from components.java
+
+            pom {
+                name = 'jte-datastar-spring-boot-starter'
+                description = 'Spring Boot library used to generate Datastar Server Sent Events and rendering the HTML using JTE'
+                url = 'https://github.com/Gadnex/jte-datastar-spring-boot-starter'
+                inceptionYear = '2025'
+                licenses {
+                    license {
+                        name = 'Apache-2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'gadnex'
+                        name = 'William Gadney'
+                    }
+                }
+                scm {
+                    connection = 'scm:git@github.com:Gadnex/jte-datastar-spring-boot-starter.git'
+                    developerConnection = 'scm:git:ssh://github.com/Gadnex/jte-datastar-spring-boot-starter.git'
+                    url = 'http://github.com/Gadnex/jte-datastar-spring-boot-starter.git'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir("maven-release")
+//            name = "MavenCentral"
+//            def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+//            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+//            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+//
+//            credentials {
+//                username = findProperty("username")
+//                password = findProperty("password")
+//            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-parameters")
+}
+
+tasks.withType(Jar) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
