@@ -20,6 +20,7 @@ public class MergeFragments extends AbstractDatastarEmitter {
   private final TemplateEngine templateEngine;
   private final String templateSuffix;
   private final Map<String, Object> attributes;
+  private final MessageSource messageSource;
   private String template;
   private String selector;
   private MergeMode mergeMode;
@@ -40,20 +41,18 @@ public class MergeFragments extends AbstractDatastarEmitter {
    * @param templateSuffix The JTE template suffix for the JTE template files
    * @param sseEmitters The set of SSE emitters to which to emit the events
    * @param messageSource The Spring MessageSource for getting language specific text
-   * @param locale The locale for localizing messages in the correct language
    */
   public MergeFragments(
       TemplateEngine templateEngine,
       String templateSuffix,
       Collection<SseEmitter> sseEmitters,
-      MessageSource messageSource,
-      Locale locale) {
+      MessageSource messageSource) {
     super(sseEmitters);
     this.templateEngine = templateEngine;
     this.templateSuffix = templateSuffix;
     this.sseEmitters = sseEmitters;
     this.attributes = new HashMap<>();
-    attributes.put(LOCALIZER, new Localizer(messageSource, locale));
+    this.messageSource = messageSource;
   }
 
   /**
@@ -64,6 +63,20 @@ public class MergeFragments extends AbstractDatastarEmitter {
    */
   public MergeFragments template(String templateName) {
     template = templateName + templateSuffix;
+    return this;
+  }
+
+  /**
+   * The required template name for HTML fragment rendering and an optional Locale if localization
+   * is required for template rendering.
+   *
+   * @param templateName The name of the JTE template for HTML fragment rendering
+   * @param locale The locale used for localization
+   * @return The MergeFragments object
+   */
+  public MergeFragments template(String templateName, Locale locale) {
+    template = templateName + templateSuffix;
+    attributes.put(LOCALIZER, new Localizer(messageSource, locale));
     return this;
   }
 

@@ -2,7 +2,6 @@ package io.github.gadnex.jtedatastar;
 
 import gg.jte.TemplateEngine;
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Set;
 import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -33,49 +32,23 @@ public class Datastar {
   }
 
   /**
-   * Construct a MergeFragments object with a collection of SSE emitters and a Locale for rendering
-   * JTE templates in a specific language.
-   *
-   * @param sseEmitters Collection of SSE emitters
-   * @param locale The locale for JTE template rendering
-   * @return The MergeFragments object
-   */
-  public MergeFragments mergeFragments(Collection<SseEmitter> sseEmitters, Locale locale) {
-    return new MergeFragments(templateEngine, templateSuffix, sseEmitters, messageSource, locale);
-  }
-
-  /**
-   * Construct a MergeFragments object with a collection of SSE emitters and using the default
-   * Locale for rendering the JTE template.
+   * Construct a MergeFragments object with a collection of SSE emitters.
    *
    * @param sseEmitters Collection of SSE emitters
    * @return The MergeFragments object
    */
   public MergeFragments mergeFragments(Collection<SseEmitter> sseEmitters) {
-    return mergeFragments(sseEmitters, Locale.getDefault());
+    return new MergeFragments(templateEngine, templateSuffix, sseEmitters, messageSource);
   }
 
   /**
-   * Construct a MergeFragments object with a single SSE emitter and a Locale for rendering JTE
-   * template in a specific language.
-   *
-   * @param sseEmitter The SSE emitter
-   * @param locale The locale for JTE template rendering
-   * @return The MergeFragments object
-   */
-  public MergeFragments mergeFragments(SseEmitter sseEmitter, Locale locale) {
-    return mergeFragments(Set.of(sseEmitter), locale);
-  }
-
-  /**
-   * Construct a MergeFragments object with a single SSE emitter and using the default Locale for
-   * rendering the JTE template.
+   * Construct a MergeFragments object with a single SSE emitter.
    *
    * @param sseEmitter The SSE emitter
    * @return The MergeFragments object
    */
   public MergeFragments mergeFragments(SseEmitter sseEmitter) {
-    return mergeFragments(Set.of(sseEmitter), Locale.getDefault());
+    return mergeFragments(Set.of(sseEmitter));
   }
 
   /**
