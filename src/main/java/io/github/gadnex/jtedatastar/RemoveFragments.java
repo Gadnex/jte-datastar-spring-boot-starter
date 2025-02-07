@@ -67,7 +67,7 @@ public class RemoveFragments extends AbstractDatastarEmitter {
    */
   public void emit() throws EmitException {
     if (selector == null || selector.isBlank()) {
-      throw new IllegalStateException("No selectors specified");
+      throw new IllegalStateException("No selector specified");
     }
     event.name(DATASTAR_REMOVE_FRAGMENTS);
     event.data(SELECTOR + selector);
