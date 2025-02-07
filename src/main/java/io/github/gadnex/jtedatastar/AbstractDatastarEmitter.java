@@ -1,6 +1,5 @@
 package io.github.gadnex.jtedatastar;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -9,8 +8,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 /** Abstract parent class for all Datastar emitters to implement common features */
 public abstract class AbstractDatastarEmitter {
 
-  /** Collection of all SSE emitters that the event will be emitted to */
-  protected Collection<SseEmitter> sseEmitters;
+  /** Set of all SSE emitters that the event will be emitted to */
+  protected Set<SseEmitter> sseEmitters;
 
   /** The event that will be emitted */
   protected SseEmitter.SseEventBuilder event;
@@ -20,7 +19,7 @@ public abstract class AbstractDatastarEmitter {
    *
    * @param sseEmitters The set of SSE emitters to which to emit the events
    */
-  protected AbstractDatastarEmitter(Collection<SseEmitter> sseEmitters) {
+  protected AbstractDatastarEmitter(Set<SseEmitter> sseEmitters) {
     this.sseEmitters = sseEmitters;
     this.event = SseEmitter.event();
     event.id(UUID.randomUUID().toString());

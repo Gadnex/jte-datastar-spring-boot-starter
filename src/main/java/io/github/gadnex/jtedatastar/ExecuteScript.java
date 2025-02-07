@@ -1,6 +1,8 @@
 package io.github.gadnex.jtedatastar;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -12,8 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
  */
 public class ExecuteScript extends AbstractDatastarEmitter {
 
-  private final Set<Map<String, String>> attributes;
-  private final Set<String> scripts;
+  private final Map<String, String> attributes;
+  private final List<String> scripts;
   private Boolean autoRemove;
 
   private static final String DATASTAR_EXECUTE_SCRIPT = " datastar-execute-script";
@@ -28,8 +30,8 @@ public class ExecuteScript extends AbstractDatastarEmitter {
    */
   public ExecuteScript(Set<SseEmitter> sseEmitters) {
     super(sseEmitters);
-    attributes = new HashSet<>();
-    scripts = new HashSet<>();
+    attributes = new HashMap<>();
+    scripts = new ArrayList<>();
   }
 
   /**
@@ -52,7 +54,13 @@ public class ExecuteScript extends AbstractDatastarEmitter {
    * @return The ExecuteScript object
    */
   public ExecuteScript attribute(String name, String value) {
-    attributes.add(Map.of(name, value));
+    if (name == null || name.isBlank()) {
+      throw new IllegalArgumentException("name cannot be null or empty");
+    }
+    if (value == null || value.isBlank()) {
+      throw new IllegalArgumentException("value cannot be null or empty");
+    }
+    attributes.put(name.trim(), value.trim());
     return this;
   }
 
@@ -63,6 +71,9 @@ public class ExecuteScript extends AbstractDatastarEmitter {
    * @return The ExecuteScript object
    */
   public ExecuteScript script(String script) {
+    if (script == null || script.isBlank()) {
+      throw new IllegalArgumentException("script is null or empty");
+    }
     scripts.add(script);
     return this;
   }
@@ -80,9 +91,8 @@ public class ExecuteScript extends AbstractDatastarEmitter {
     if (autoRemove != null) {
       event.data(AUTO_REMOVE + autoRemove);
     }
-    for (Map<String, String> attribute : attributes) {
-      String key = attribute.keySet().iterator().next();
-      event.data(ATTRIBUTES + key + " " + attribute.get(key));
+    for (String key : attributes.keySet()) {
+      event.data(ATTRIBUTES + key + " " + attributes.get(key));
     }
     for (String script : scripts) {
       event.data(SCRIPT + script);

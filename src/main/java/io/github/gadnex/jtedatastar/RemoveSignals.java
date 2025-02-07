@@ -32,7 +32,7 @@ public class RemoveSignals extends AbstractDatastarEmitter {
    * @return The RemoveSignals object
    */
   public RemoveSignals path(String path) {
-    paths.add(path);
+    paths.add(path.trim());
     return this;
   }
 

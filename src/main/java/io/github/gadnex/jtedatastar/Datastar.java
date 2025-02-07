@@ -1,7 +1,6 @@
 package io.github.gadnex.jtedatastar;
 
 import gg.jte.TemplateEngine;
-import java.util.Collection;
 import java.util.Set;
 import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -34,10 +33,13 @@ public class Datastar {
   /**
    * Construct a MergeFragments object with a collection of SSE emitters.
    *
-   * @param sseEmitters Collection of SSE emitters
+   * @param sseEmitters Set of SSE emitters
    * @return The MergeFragments object
    */
-  public MergeFragments mergeFragments(Collection<SseEmitter> sseEmitters) {
+  public MergeFragments mergeFragments(Set<SseEmitter> sseEmitters) {
+    if (sseEmitters == null || sseEmitters.isEmpty()) {
+      throw new IllegalArgumentException("sseEmitters is null or empty");
+    }
     return new MergeFragments(templateEngine, templateSuffix, sseEmitters, messageSource);
   }
 
@@ -48,16 +50,22 @@ public class Datastar {
    * @return The MergeFragments object
    */
   public MergeFragments mergeFragments(SseEmitter sseEmitter) {
+    if (sseEmitter == null) {
+      throw new IllegalArgumentException("sseEmitter is null");
+    }
     return mergeFragments(Set.of(sseEmitter));
   }
 
   /**
    * Construct a RemoveFragments object with a collection of SSE emitters
    *
-   * @param sseEmitters Collection of SSE emitters
+   * @param sseEmitters Set of SSE emitters
    * @return The RemoveFragments object
    */
   public RemoveFragments removeFragments(Set<SseEmitter> sseEmitters) {
+    if (sseEmitters == null || sseEmitters.isEmpty()) {
+      throw new IllegalArgumentException("sseEmitters is null or empty");
+    }
     return new RemoveFragments(sseEmitters);
   }
 
@@ -68,16 +76,22 @@ public class Datastar {
    * @return The RemoveFragments object
    */
   public RemoveFragments removeFragments(SseEmitter sseEmitter) {
+    if (sseEmitter == null) {
+      throw new IllegalArgumentException("sseEmitter is null");
+    }
     return removeFragments(Set.of(sseEmitter));
   }
 
   /**
    * Construct a MergeSignals object with a collection of SSE emitters
    *
-   * @param sseEmitters Collection of SSE emitters
+   * @param sseEmitters Set of SSE emitters
    * @return The MergeSignals object
    */
   public MergeSignals mergeSignals(Set<SseEmitter> sseEmitters) {
+    if (sseEmitters == null || sseEmitters.isEmpty()) {
+      throw new IllegalArgumentException("sseEmitters is null or empty");
+    }
     return new MergeSignals(sseEmitters);
   }
 
@@ -88,16 +102,22 @@ public class Datastar {
    * @return The MergeSignals object
    */
   public MergeSignals mergeSignals(SseEmitter sseEmitter) {
+    if (sseEmitter == null) {
+      throw new IllegalArgumentException("sseEmitter is null");
+    }
     return mergeSignals(Set.of(sseEmitter));
   }
 
   /**
    * Construct a RemoveSignals object with a collection of SSE emitters
    *
-   * @param sseEmitters Collection of SSE emitters
+   * @param sseEmitters Set of SSE emitters
    * @return The RemoveSignals object
    */
   public RemoveSignals removeSignals(Set<SseEmitter> sseEmitters) {
+    if (sseEmitters == null || sseEmitters.isEmpty()) {
+      throw new IllegalArgumentException("sseEmitters is null or empty");
+    }
     return new RemoveSignals(sseEmitters);
   }
 
@@ -108,16 +128,22 @@ public class Datastar {
    * @return The RemoveSignals object
    */
   public RemoveSignals removeSignals(SseEmitter sseEmitter) {
+    if (sseEmitter == null) {
+      throw new IllegalArgumentException("sseEmitter is null");
+    }
     return removeSignals(Set.of(sseEmitter));
   }
 
   /**
    * Construct an ExecuteScript object with a collection of SSE emitters
    *
-   * @param sseEmitters Collection of SSE emitters
+   * @param sseEmitters Set of SSE emitters
    * @return The ExecuteScript object
    */
   public ExecuteScript executeScript(Set<SseEmitter> sseEmitters) {
+    if (sseEmitters == null || sseEmitters.isEmpty()) {
+      throw new IllegalArgumentException("sseEmitters is null or empty");
+    }
     return new ExecuteScript(sseEmitters);
   }
 
@@ -128,6 +154,9 @@ public class Datastar {
    * @return The ExecuteScript object
    */
   public ExecuteScript executeScript(SseEmitter sseEmitter) {
+    if (sseEmitter == null) {
+      throw new IllegalArgumentException("sseEmitter is null");
+    }
     return executeScript(Set.of(sseEmitter));
   }
 }

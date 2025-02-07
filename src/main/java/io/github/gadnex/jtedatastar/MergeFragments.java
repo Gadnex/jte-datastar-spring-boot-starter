@@ -2,10 +2,10 @@ package io.github.gadnex.jtedatastar;
 
 import gg.jte.TemplateEngine;
 import gg.jte.output.StringOutput;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -45,12 +45,11 @@ public class MergeFragments extends AbstractDatastarEmitter {
   public MergeFragments(
       TemplateEngine templateEngine,
       String templateSuffix,
-      Collection<SseEmitter> sseEmitters,
+      Set<SseEmitter> sseEmitters,
       MessageSource messageSource) {
     super(sseEmitters);
     this.templateEngine = templateEngine;
     this.templateSuffix = templateSuffix;
-    this.sseEmitters = sseEmitters;
     this.attributes = new HashMap<>();
     this.messageSource = messageSource;
   }
@@ -99,7 +98,7 @@ public class MergeFragments extends AbstractDatastarEmitter {
    * @return The MergeFragments object
    */
   public MergeFragments selector(String selector) {
-    this.selector = selector;
+    this.selector = selector.trim();
     return this;
   }
 
@@ -146,7 +145,7 @@ public class MergeFragments extends AbstractDatastarEmitter {
       throw new IllegalStateException("The template must not be null");
     }
     event.name(DATASTAR_MERGE_FRAGMENTS);
-    if (selector != null) {
+    if (selector != null && !selector.isEmpty()) {
       event.data(SELECTOR + selector);
     }
     if (mergeMode != null) {
