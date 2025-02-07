@@ -4,10 +4,10 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
-    id 'org.springframework.boot' version '3.4.1' apply false
+    id 'org.springframework.boot' version '3.4.2' apply false
     id 'io.spring.dependency-management' version '1.1.7'
     id 'pl.allegro.tech.build.axion-release' version '1.18.16'
-    id 'com.diffplug.spotless' version '7.0.0.BETA4'
+    id 'com.diffplug.spotless' version '7.0.2'
 }
 
 scmVersion {

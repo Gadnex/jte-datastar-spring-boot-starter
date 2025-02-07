@@ -1,6 +1,5 @@
 package io.github.gadnex.jtedatastar;
 
-import java.util.HashSet;
 import java.util.Set;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -11,9 +10,13 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
  */
 public class RemoveFragments extends AbstractDatastarEmitter {
 
-  private final Set<String> selectors;
+  private String selector;
+  private Integer settleDuration;
+  private Boolean useViewTransition;
   private static final String DATASTAR_REMOVE_FRAGMENTS = " datastar-remove-fragments";
   private static final String SELECTOR = " selector ";
+  private static final String SETTLE_DURATION = " settleDuration ";
+  private static final String USE_VIEW_TRANSITION = " useViewTransition ";
 
   /**
    * Constructor for creating the RemoveFragments emitter
@@ -22,7 +25,6 @@ public class RemoveFragments extends AbstractDatastarEmitter {
    */
   public RemoveFragments(Set<SseEmitter> sseEmitters) {
     super(sseEmitters);
-    this.selectors = new HashSet<>();
   }
 
   /**
@@ -32,7 +34,29 @@ public class RemoveFragments extends AbstractDatastarEmitter {
    * @return The RemoveFragments object
    */
   public RemoveFragments selector(String selector) {
-    selectors.add(selector);
+    this.selector = selector.trim();
+    return this;
+  }
+
+  /**
+   * Optionally settles the element after this time, useful for transitions. Defaults to 300.
+   *
+   * @param settleDuration The settle duration in ms.
+   * @return The RemoveFragments object
+   */
+  public RemoveFragments settleDuration(int settleDuration) {
+    this.settleDuration = settleDuration;
+    return this;
+  }
+
+  /**
+   * Whether to use view transitions when merging into the DOM. Defaults to false.
+   *
+   * @param useViewTransition The useViewTransition value
+   * @return The RemoveFragments object
+   */
+  public RemoveFragments useViewTransition(boolean useViewTransition) {
+    this.useViewTransition = useViewTransition;
     return this;
   }
 
@@ -42,12 +66,16 @@ public class RemoveFragments extends AbstractDatastarEmitter {
    * @throws EmitException Exception if the event fails to be emitted
    */
   public void emit() throws EmitException {
-    if (selectors.isEmpty()) {
+    if (selector == null || selector.isBlank()) {
       throw new IllegalStateException("No selectors specified");
     }
     event.name(DATASTAR_REMOVE_FRAGMENTS);
-    for (String selector : selectors) {
-      event.data(SELECTOR + selector);
+    event.data(SELECTOR + selector);
+    if (settleDuration != null) {
+      event.data(SETTLE_DURATION + settleDuration);
+    }
+    if (useViewTransition != null) {
+      event.data(USE_VIEW_TRANSITION + useViewTransition);
     }
     emitEvents();
   }
