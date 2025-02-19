@@ -42,46 +42,36 @@ The following needs to be done to use the starter on your project.
 
 SSE events need to be emitted from a separate thread, therefore we:
 - Create an SSE emitter
-- Call an @Async method on a different Spring component
-- Pass the SSE emitter in this method call
-- Return the emitter to the browser to start listening for SSE events
+- Run the code to emit Datastar SSE events on a separate thread
+- Return the emitter to the browser to start listening for SSE events before events star being emitted
 
 ```java
-    @GetMapping("do-something")
-    public SseEmitter doSomething() {
-        SseEmitter sseEmitter = new SseEmitter();
-        worker.doSomething(sseEmitter);
-        return sseEmitter;
-    }
-```
+    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 
-### Worker class
-
-In the worker class we:
-- Inject the Datastar bean from the plugin.
-- Annotate our worker method with @Async.
-- Call the Datastar bean in a try-catch block
-- Catch and handle the EmitException
-- Complete the SSE emitter to close the connection from the browser.
-
-```java
     @Autowired
     private Datastar datastar;
 
-    @Async
-    public void doSomething(SseEmitter sseEmitter) {
-        try {
-            datastar.mergeFragments(sseEmitter)
-                    .template("TemplateName")
-                    .emit();
-        } catch (EmitException ex) {}
-        sseEmitter.complete();
+    @GetMapping("do-something")
+    public SseEmitter doSomething() {
+        SseEmitter sseEmitter = new SseEmitter();
+        EXECUTOR.execute(
+                () -> {
+                    try {
+                        datastar.mergeFragments(sseEmitter)
+                                .template("TemplateName")
+                                .emit();
+                    } catch (EmitException ex) {
+                    } finally {
+                        sseEmitter.complete();
+                    }
+                });
+        return sseEmitter;
     }
 ```
 
 In this case we did not do anything in the exception handler. 
 In scenarios where we plan to send multiple events to the SSE emitter over time,
-we usually keep the emitter in a data structure in the worker.
+we usually keep the emitter in a data structure.
 In such a case we would remove the SSE emitter from the data structure to
 prevent future events from being sent to this emitter.
 
