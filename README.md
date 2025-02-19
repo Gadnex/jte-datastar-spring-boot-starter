@@ -56,9 +56,12 @@ SSE events need to be emitted from a separate thread, therefore we:
         SseEmitter sseEmitter = new SseEmitter();
         EXECUTOR.execute(
                 () -> {
+                    // Perform business logic here
+                    var something = "Business logic result";
                     try {
                         datastar.mergeFragments(sseEmitter)
                                 .template("TemplateName")
+                                .attribute("something", something)
                                 .emit();
                     } catch (EmitException ex) {
                     } finally {
