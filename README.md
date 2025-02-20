@@ -1,3 +1,7 @@
+[![GitHub Release](https://img.shields.io/github/v/release/Gadnex/jte-datastar-spring-boot-starter)](https://github.com/Gadnex/jte-datastar-spring-boot-starter/releases)
+[![License](https://img.shields.io/github/license/Gadnex/jte-datastar-spring-boot-starter)](https://github.com/Gadnex/jte-datastar-spring-boot-starter/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/Gadnex/jte-datastar-spring-boot-starter?style=flat)](https://github.com/Gadnex/jte-datastar-spring-boot-starter/stargazers)
+
 # jte-datastar-spring-boot-starter
 
 This project is a custom Spring Boot starter project with auto configuration.
