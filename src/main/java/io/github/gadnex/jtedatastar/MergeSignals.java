@@ -56,12 +56,8 @@ public class MergeSignals extends AbstractDatastarEmitter {
     return this;
   }
 
-  /**
-   * Emit the SSE event
-   *
-   * @throws EmitException Exception if the event fails to be emitted
-   */
-  public void emit() throws EmitException {
+  /** Emit the SSE event */
+  public void emit() {
     if (signals.isEmpty()) {
       throw new IllegalStateException("No signals specified");
     }

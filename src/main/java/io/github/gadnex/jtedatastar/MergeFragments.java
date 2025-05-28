@@ -135,12 +135,8 @@ public class MergeFragments extends AbstractDatastarEmitter {
     return this;
   }
 
-  /**
-   * Emit the SSE event
-   *
-   * @throws EmitException Exception if the event fails to be emitted
-   */
-  public void emit() throws EmitException {
+  /** Emit the SSE event */
+  public void emit() {
     if (template == null) {
       throw new IllegalStateException("The template must not be null");
     }

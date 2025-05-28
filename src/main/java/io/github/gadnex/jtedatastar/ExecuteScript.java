@@ -78,12 +78,8 @@ public class ExecuteScript extends AbstractDatastarEmitter {
     return this;
   }
 
-  /**
-   * Emit the SSE event
-   *
-   * @throws EmitException Exception if the event fails to be emitted
-   */
-  public void emit() throws EmitException {
+  /** Emit the SSE event */
+  public void emit() {
     if (scripts.isEmpty()) {
       throw new IllegalStateException("No scripts specified");
     }
