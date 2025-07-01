@@ -1,27 +1,23 @@
 package io.github.gadnex.jtedatastar;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
- * A class to emit Datastar ExecuteScript events
+ * A class to emit Datastar PatchElements events to execute a script on the client.
  *
  * <p>Executes JavaScript in the browser.
  */
 public class ExecuteScript extends AbstractDatastarEmitter {
 
-  private final Map<String, String> attributes;
   private final List<String> scripts;
   private Boolean autoRemove;
 
-  private static final String DATASTAR_EXECUTE_SCRIPT = " datastar-execute-script";
-  private static final String AUTO_REMOVE = " autoRemove ";
-  private static final String ATTRIBUTES = " attributes ";
-  private static final String SCRIPT = " script ";
+  private static final String DATASTAR_PATCH_ELEMENTS = " datastar-patch-elements";
+  private static final String SELECTOR = " selector body";
+  private static final String ELEMENTS_DATALINE_LITERAL = " elements ";
 
   /**
    * Constructor for creating the ExecuteScript emitter
@@ -30,7 +26,6 @@ public class ExecuteScript extends AbstractDatastarEmitter {
    */
   public ExecuteScript(Set<SseEmitter> sseEmitters) {
     super(sseEmitters);
-    attributes = new HashMap<>();
     scripts = new ArrayList<>();
   }
 
@@ -42,25 +37,6 @@ public class ExecuteScript extends AbstractDatastarEmitter {
    */
   public ExecuteScript autoRemove(boolean autoRemove) {
     this.autoRemove = autoRemove;
-    return this;
-  }
-
-  /**
-   * Optionally add a script attribute. Each attributes line adds an attribute (in the format name
-   * value) to the script element.
-   *
-   * @param name The attribute name
-   * @param value The attribute value
-   * @return The ExecuteScript object
-   */
-  public ExecuteScript attribute(String name, String value) {
-    if (name == null || name.isBlank()) {
-      throw new IllegalArgumentException("name cannot be null or empty");
-    }
-    if (value == null || value.isBlank()) {
-      throw new IllegalArgumentException("value cannot be null or empty");
-    }
-    attributes.put(name.trim(), value.trim());
     return this;
   }
 
@@ -83,16 +59,18 @@ public class ExecuteScript extends AbstractDatastarEmitter {
     if (scripts.isEmpty()) {
       throw new IllegalStateException("No scripts specified");
     }
-    event.name(DATASTAR_EXECUTE_SCRIPT);
-    if (autoRemove != null) {
-      event.data(AUTO_REMOVE + autoRemove);
-    }
-    for (String key : attributes.keySet()) {
-      event.data(ATTRIBUTES + key + " " + attributes.get(key));
+    event.name(DATASTAR_PATCH_ELEMENTS);
+    event.data(PatchMode.APPEND.output());
+    event.data(SELECTOR);
+    if ((autoRemove != null) && autoRemove) {
+      event.data(ELEMENTS_DATALINE_LITERAL + "<script onload=\"this.remove()\">");
+    } else {
+      event.data(ELEMENTS_DATALINE_LITERAL + "<script>");
     }
     for (String script : scripts) {
-      event.data(SCRIPT + script);
+      event.data(ELEMENTS_DATALINE_LITERAL + script);
     }
+    event.data(ELEMENTS_DATALINE_LITERAL + "</script>");
     emitEvents();
   }
 }

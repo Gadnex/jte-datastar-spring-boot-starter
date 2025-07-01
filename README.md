@@ -6,9 +6,8 @@
 
 This project is a custom Spring Boot starter project with autoconfiguration.
 
-It is used to render HTML fragments using the Java Template Engine (JTE) and emitting
-the HTML as Datastar MergeFragments Server Sent Events (SSE). It also emits the other
-Datastar event types.
+It is used to render HTML elements using the Java Template Engine (JTE) and emitting
+the HTML as Datastar PatchElements Server Sent Events (SSE). It also emits Datastar PatchSignals events.
 
 ## Using the starter
 
@@ -62,7 +61,7 @@ SSE events need to be emitted from a separate thread, therefore we:
                 () -> {
                     // Perform business logic here
                     var something = "Business logic result";
-                    datastar.mergeFragments(sseEmitter)
+                    datastar.PatchElements(sseEmitter)
                             .template("TemplateName")
                             .attribute("something", something)
                             .emit();
@@ -106,12 +105,3 @@ We also remove the SseEmitter from the data structure on error, completion and t
 
 If we want to send future events to the SSE emitter, we should not complete
 the emitter.
-
-## Datastar emitter
-
-The Datastar plugin supports all Datastar event types:
-- MergeFragments
-- RemoveFragments
-- MergeSignals
-- RemoveSignals
-- ExecuteScript

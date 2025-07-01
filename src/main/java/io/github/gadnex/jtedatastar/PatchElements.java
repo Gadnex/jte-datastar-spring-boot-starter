@@ -10,12 +10,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
- * A class to emit Datastar MergeFragments events.
+ * A class to emit Datastar PatchElements events.
  *
- * <p>Merges one or more fragments into the DOM. By default, Datastar merges fragments using
- * Idiomorph, which matches top level elements based on their ID.
+ * <p>Patches one or more elements into the DOM. By default, Datastar patches elements using
+ * Idiomorph, which matches top level elements based on their ID. It can also remove elements from
+ * the DOM.
  */
-public class MergeFragments extends AbstractDatastarEmitter {
+public class PatchElements extends AbstractDatastarEmitter {
 
   private final TemplateEngine templateEngine;
   private final String templateSuffix;
@@ -23,26 +24,24 @@ public class MergeFragments extends AbstractDatastarEmitter {
   private final MessageSource messageSource;
   private String template;
   private String selector;
-  private MergeMode mergeMode;
-  private Integer settleDuration;
+  private PatchMode patchMode;
   private Boolean useViewTransition;
 
   private static final String LOCALIZER = "localizer";
-  private static final String DATASTAR_MERGE_FRAGMENTS = " datastar-merge-fragments";
+  private static final String DATASTAR_PATCH_ELEMENTS = " datastar-patch-elements";
   private static final String SELECTOR = " selector ";
-  private static final String SETTLE_DURATION = " settleDuration ";
   private static final String USE_VIEW_TRANSITION = " useViewTransition ";
-  private static final String FRAGMENTS_DATALINE_LITERAL = " fragments ";
+  private static final String ELEMENTS_DATALINE_LITERAL = " elements ";
 
   /**
-   * Constructor for creating the MergeFragments emitter
+   * Constructor for creating the PatchElements emitter
    *
-   * @param templateEngine The JTE template engine for rendering HTML fragments
+   * @param templateEngine The JTE template engine for rendering HTML elements
    * @param templateSuffix The JTE template suffix for the JTE template files
    * @param sseEmitters The set of SSE emitters to which to emit the events
    * @param messageSource The Spring MessageSource for getting language specific text
    */
-  public MergeFragments(
+  public PatchElements(
       TemplateEngine templateEngine,
       String templateSuffix,
       Set<SseEmitter> sseEmitters,
@@ -55,25 +54,25 @@ public class MergeFragments extends AbstractDatastarEmitter {
   }
 
   /**
-   * The required template name for HTML fragment rendering
+   * The required template name for HTML element rendering
    *
-   * @param templateName The name of the JTE template for HTML fragment rendering
-   * @return The MergeFragments object
+   * @param templateName The name of the JTE template for HTML element rendering
+   * @return The PatchElements object
    */
-  public MergeFragments template(String templateName) {
+  public PatchElements template(String templateName) {
     template = templateName + templateSuffix;
     return this;
   }
 
   /**
-   * The required template name for HTML fragment rendering and an optional Locale if localization
-   * is required for template rendering.
+   * The required template name for HTML element rendering and an optional Locale if localization is
+   * required for template rendering.
    *
-   * @param templateName The name of the JTE template for HTML fragment rendering
+   * @param templateName The name of the JTE template for HTML element rendering
    * @param locale The locale used for localization
-   * @return The MergeFragments object
+   * @return The PatchElements object
    */
-  public MergeFragments template(String templateName, Locale locale) {
+  public PatchElements template(String templateName, Locale locale) {
     template = templateName + templateSuffix;
     attributes.put(LOCALIZER, new Localizer(messageSource, locale));
     return this;
@@ -84,43 +83,33 @@ public class MergeFragments extends AbstractDatastarEmitter {
    *
    * @param key The key of the attribute used in the template
    * @param value The value of the attribute that will replace the key
-   * @return The MergeFragments object
+   * @return The PatchElements object
    */
-  public MergeFragments attribute(String key, Object value) {
+  public PatchElements attribute(String key, Object value) {
     attributes.put(key, value);
     return this;
   }
 
   /**
-   * Selects the target element of the merge process using a CSS selector.
+   * Selects the target element of the patch process using a CSS selector. Multiple selectors can be
+   * added as a comma separated list.
    *
    * @param selector The CSS selector
-   * @return The MergeFragments object
+   * @return The PatchElements object
    */
-  public MergeFragments selector(String selector) {
+  public PatchElements selector(String selector) {
     this.selector = selector.trim();
     return this;
   }
 
   /**
-   * Optionally specify the Datastar merge mode. Default is 'morph'.
+   * Optionally specify the Datastar patch mode. Default is 'outer'.
    *
-   * @param mergeMode The merge mode to set
-   * @return The MergeFragments object
+   * @param patchMode The patch mode to set
+   * @return The PatchElements object
    */
-  public MergeFragments mergeMode(MergeMode mergeMode) {
-    this.mergeMode = mergeMode;
-    return this;
-  }
-
-  /**
-   * Optionally settles the element after this time, useful for transitions. Defaults to 300.
-   *
-   * @param settleDuration The settle duration in ms.
-   * @return The MergeFragments object
-   */
-  public MergeFragments settleDuration(int settleDuration) {
-    this.settleDuration = settleDuration;
+  public PatchElements patchMode(PatchMode patchMode) {
+    this.patchMode = patchMode;
     return this;
   }
 
@@ -128,40 +117,39 @@ public class MergeFragments extends AbstractDatastarEmitter {
    * Whether to use view transitions when merging into the DOM. Defaults to false.
    *
    * @param useViewTransition The useViewTransition value
-   * @return The MergeFragments object
+   * @return The PatchElements object
    */
-  public MergeFragments useViewTransition(boolean useViewTransition) {
+  public PatchElements useViewTransition(boolean useViewTransition) {
     this.useViewTransition = useViewTransition;
     return this;
   }
 
   /** Emit the SSE event */
   public void emit() {
-    if (template == null) {
+    if ((patchMode != PatchMode.REMOVE) && (template == null)) {
       throw new IllegalStateException("The template must not be null");
     }
-    event.name(DATASTAR_MERGE_FRAGMENTS);
+    event.name(DATASTAR_PATCH_ELEMENTS);
+    if (patchMode != null) {
+      event.data(patchMode.output());
+    }
     if (selector != null && !selector.isEmpty()) {
       event.data(SELECTOR + selector);
-    }
-    if (mergeMode != null) {
-      event.data(mergeMode.output());
-    }
-    if (settleDuration != null) {
-      event.data(SETTLE_DURATION + settleDuration);
     }
     if (useViewTransition != null) {
       event.data(USE_VIEW_TRANSITION + useViewTransition);
     }
-    String html = renderHtmlFragment();
-    html.lines()
-        .map(String::trim)
-        .filter(line -> !line.isEmpty())
-        .forEach(line -> event.data(FRAGMENTS_DATALINE_LITERAL + line));
+    if (template != null) {
+      String html = renderHtmlElement();
+      html.lines()
+          .map(String::trim)
+          .filter(line -> !line.isEmpty())
+          .forEach(line -> event.data(ELEMENTS_DATALINE_LITERAL + line));
+    }
     emitEvents();
   }
 
-  private String renderHtmlFragment() {
+  private String renderHtmlElement() {
     var output = new StringOutput();
     templateEngine.render(template, attributes, output);
     return output.toString();

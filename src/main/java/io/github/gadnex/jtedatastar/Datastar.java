@@ -18,7 +18,7 @@ public class Datastar {
   /**
    * Constructor for the Datastar Spring Bean
    *
-   * @param templateEngine The JTE template engine used to render HTML MergeFragments
+   * @param templateEngine The JTE template engine used to render HTML PatchElements
    * @param templateSuffix The template suffix used for JTE template files
    * @param messageSource The Spring MessageSource used for getting language specific text for
    *     template rendering
@@ -31,107 +31,55 @@ public class Datastar {
   }
 
   /**
-   * Construct a MergeFragments object with a collection of SSE emitters.
+   * Construct a PatchElements object with a collection of SSE emitters.
    *
    * @param sseEmitters Set of SSE emitters
-   * @return The MergeFragments object
+   * @return The PatchElements object
    */
-  public MergeFragments mergeFragments(Set<SseEmitter> sseEmitters) {
+  public PatchElements patchElements(Set<SseEmitter> sseEmitters) {
     if (sseEmitters == null || sseEmitters.isEmpty()) {
       throw new IllegalArgumentException("sseEmitters is null or empty");
     }
-    return new MergeFragments(templateEngine, templateSuffix, sseEmitters, messageSource);
+    return new PatchElements(templateEngine, templateSuffix, sseEmitters, messageSource);
   }
 
   /**
-   * Construct a MergeFragments object with a single SSE emitter.
+   * Construct a PatchElements object with a single SSE emitter.
    *
    * @param sseEmitter The SSE emitter
-   * @return The MergeFragments object
+   * @return The PatchElements object
    */
-  public MergeFragments mergeFragments(SseEmitter sseEmitter) {
+  public PatchElements patchElements(SseEmitter sseEmitter) {
     if (sseEmitter == null) {
       throw new IllegalArgumentException("sseEmitter is null");
     }
-    return mergeFragments(Set.of(sseEmitter));
+    return patchElements(Set.of(sseEmitter));
   }
 
   /**
-   * Construct a RemoveFragments object with a collection of SSE emitters
+   * Construct a PatchSignals object with a collection of SSE emitters
    *
    * @param sseEmitters Set of SSE emitters
-   * @return The RemoveFragments object
+   * @return The PatchSignals object
    */
-  public RemoveFragments removeFragments(Set<SseEmitter> sseEmitters) {
+  public PatchSignals patchSignals(Set<SseEmitter> sseEmitters) {
     if (sseEmitters == null || sseEmitters.isEmpty()) {
       throw new IllegalArgumentException("sseEmitters is null or empty");
     }
-    return new RemoveFragments(sseEmitters);
+    return new PatchSignals(sseEmitters);
   }
 
   /**
-   * Construct a RemoveFragments object with a single SSE emitter
+   * Construct a PatchSignals object with a single SSE emitter
    *
    * @param sseEmitter The SSE emitter
-   * @return The RemoveFragments object
+   * @return The PatchSignals object
    */
-  public RemoveFragments removeFragments(SseEmitter sseEmitter) {
+  public PatchSignals patchSignals(SseEmitter sseEmitter) {
     if (sseEmitter == null) {
       throw new IllegalArgumentException("sseEmitter is null");
     }
-    return removeFragments(Set.of(sseEmitter));
-  }
-
-  /**
-   * Construct a MergeSignals object with a collection of SSE emitters
-   *
-   * @param sseEmitters Set of SSE emitters
-   * @return The MergeSignals object
-   */
-  public MergeSignals mergeSignals(Set<SseEmitter> sseEmitters) {
-    if (sseEmitters == null || sseEmitters.isEmpty()) {
-      throw new IllegalArgumentException("sseEmitters is null or empty");
-    }
-    return new MergeSignals(sseEmitters);
-  }
-
-  /**
-   * Construct a MergeSignals object with a single SSE emitter
-   *
-   * @param sseEmitter The SSE emitter
-   * @return The MergeSignals object
-   */
-  public MergeSignals mergeSignals(SseEmitter sseEmitter) {
-    if (sseEmitter == null) {
-      throw new IllegalArgumentException("sseEmitter is null");
-    }
-    return mergeSignals(Set.of(sseEmitter));
-  }
-
-  /**
-   * Construct a RemoveSignals object with a collection of SSE emitters
-   *
-   * @param sseEmitters Set of SSE emitters
-   * @return The RemoveSignals object
-   */
-  public RemoveSignals removeSignals(Set<SseEmitter> sseEmitters) {
-    if (sseEmitters == null || sseEmitters.isEmpty()) {
-      throw new IllegalArgumentException("sseEmitters is null or empty");
-    }
-    return new RemoveSignals(sseEmitters);
-  }
-
-  /**
-   * Construct a RemoveSignals object with a single SSE emitter
-   *
-   * @param sseEmitter The SSE emitter
-   * @return The RemoveSignals object
-   */
-  public RemoveSignals removeSignals(SseEmitter sseEmitter) {
-    if (sseEmitter == null) {
-      throw new IllegalArgumentException("sseEmitter is null");
-    }
-    return removeSignals(Set.of(sseEmitter));
+    return patchSignals(Set.of(sseEmitter));
   }
 
   /**
