@@ -61,7 +61,7 @@ SSE events need to be emitted from a separate thread, therefore we:
                 () -> {
                     // Perform business logic here
                     var something = "Business logic result";
-                    datastar.PatchElements(sseEmitter)
+                    datastar.patchElements(sseEmitter)
                             .template("TemplateName")
                             .attribute("something", something)
                             .emit();
