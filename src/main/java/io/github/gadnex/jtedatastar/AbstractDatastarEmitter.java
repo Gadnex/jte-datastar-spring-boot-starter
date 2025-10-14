@@ -2,8 +2,6 @@ package io.github.gadnex.jtedatastar;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /** Abstract parent class for all Datastar emitters to implement common features */
@@ -14,8 +12,6 @@ public abstract class AbstractDatastarEmitter {
 
   /** The event that will be emitted */
   protected SseEmitter.SseEventBuilder event;
-
-  private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
   /**
    * Constructor
@@ -30,15 +26,12 @@ public abstract class AbstractDatastarEmitter {
 
   /** Emit the event to all SSE emitters */
   protected void emitEvents() {
-    EXECUTOR.execute(
-        () -> {
-          for (SseEmitter sseEmitter : sseEmitters) {
-            try {
-              sseEmitter.send(event);
-            } catch (Exception ex) {
-              sseEmitter.completeWithError(ex);
-            }
-          }
-        });
+    for (SseEmitter sseEmitter : sseEmitters) {
+      try {
+        sseEmitter.send(event);
+      } catch (Exception ex) {
+        sseEmitter.completeWithError(ex);
+      }
+    }
   }
 }
