@@ -13,6 +13,12 @@ the HTML as Datastar PatchElements Server Sent Events (SSE). It also emits Datas
 
 The following needs to be done to use the starter on your project.
 
+### Spring Boot version
+
+Version **0.3.x** and later of **jte-datastar-spring-boot-starter** is based on Spring Boot 4.x and does not work with Spring Boot 3.x.
+
+For Spring Boot 3.x support, please use version **0.2.5**.
+
 ### Add the required dependencies
 
 **Maven**
