@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import org.jspecify.annotations.Nullable;
 import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -22,10 +23,10 @@ public class PatchElements extends AbstractDatastarEmitter {
   private final String templateSuffix;
   private final Map<String, Object> attributes;
   private final MessageSource messageSource;
-  private String template;
-  private String selector;
-  private PatchMode patchMode;
-  private Boolean useViewTransition;
+  private @Nullable String template;
+  private @Nullable String selector;
+  private @Nullable PatchMode patchMode;
+  private @Nullable Boolean useViewTransition;
 
   private static final String LOCALIZER = "localizer";
   private static final String DATASTAR_PATCH_ELEMENTS = " datastar-patch-elements";

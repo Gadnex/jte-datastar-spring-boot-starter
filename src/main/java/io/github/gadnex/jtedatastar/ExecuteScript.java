@@ -1,6 +1,7 @@
 package io.github.gadnex.jtedatastar;
 
 import java.util.*;
+import org.jspecify.annotations.Nullable;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
@@ -11,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class ExecuteScript extends AbstractDatastarEmitter {
 
   private final List<String> scripts;
-  private Boolean autoRemove;
+  private @Nullable Boolean autoRemove;
   private final StringBuilder attributes = new StringBuilder();
 
   private static final String DATASTAR_PATCH_ELEMENTS = " datastar-patch-elements";

@@ -1,11 +1,12 @@
 package io.github.gadnex.jtedatastar;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.jspecify.annotations.Nullable;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * A class to emit Datastar PatchSignals events.
@@ -15,8 +16,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class PatchSignals extends AbstractDatastarEmitter {
 
   private final Map<String, Object> signals;
-  private final ObjectMapper objectMapper;
-  private Boolean onlyIfMissing;
+  private final JsonMapper jsonMapper;
+  private @Nullable Boolean onlyIfMissing;
 
   private static final String DATASTAR_PATCH_SIGNALS = " datastar-patch-signals";
   private static final String ONLY_IF_MISSING = " onlyIfMissing ";
@@ -30,7 +31,7 @@ public class PatchSignals extends AbstractDatastarEmitter {
   public PatchSignals(Set<SseEmitter> sseEmitters) {
     super(sseEmitters);
     signals = new HashMap<>();
-    this.objectMapper = new ObjectMapper();
+    this.jsonMapper = new JsonMapper();
   }
 
   /**
@@ -66,9 +67,9 @@ public class PatchSignals extends AbstractDatastarEmitter {
       event.data(ONLY_IF_MISSING + onlyIfMissing);
     }
     try {
-      String signalsString = objectMapper.writeValueAsString(signals);
+      String signalsString = jsonMapper.writeValueAsString(signals);
       event.data(SIGNALS + signalsString);
-    } catch (JsonProcessingException ex) {
+    } catch (JacksonException ex) {
       throw new IllegalStateException("cannot convert signals to JSON", ex);
     }
     emitEvents();
