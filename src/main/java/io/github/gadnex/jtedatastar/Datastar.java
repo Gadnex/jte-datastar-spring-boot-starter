@@ -16,6 +16,12 @@ public class Datastar {
   private final MessageSource messageSource;
 
   /**
+   * HTTP Request Header sent by all Datastar requests.
+   * Used by backend controller methods to filter incoming HTTP requests with this header.
+   */
+  public static final String REQUEST_HEADER = "Datastar-Request";
+
+  /**
    * Constructor for the Datastar Spring Bean
    *
    * @param templateEngine The JTE template engine used to render HTML PatchElements
