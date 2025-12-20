@@ -26,6 +26,7 @@ public class PatchElements extends AbstractDatastarEmitter {
   private @Nullable String template;
   private @Nullable String selector;
   private @Nullable PatchMode patchMode;
+  private @Nullable Namespace namespace;
   private @Nullable Boolean useViewTransition;
 
   private static final String LOCALIZER = "localizer";
@@ -115,6 +116,17 @@ public class PatchElements extends AbstractDatastarEmitter {
   }
 
   /**
+   * Optionally specify the Datastar namespace for patching SVG or MathML elements.
+   *
+   * @param namespace The namespace to set
+   * @return The PatchElements object
+   */
+  public PatchElements namespace(Namespace namespace) {
+    this.namespace = namespace;
+    return this;
+  }
+
+  /**
    * Whether to use view transitions when merging into the DOM. Defaults to false.
    *
    * @param useViewTransition The useViewTransition value
@@ -133,6 +145,9 @@ public class PatchElements extends AbstractDatastarEmitter {
     event.name(DATASTAR_PATCH_ELEMENTS);
     if (patchMode != null) {
       event.data(patchMode.output());
+    }
+    if (namespace != null) {
+      event.data(namespace.output());
     }
     if (selector != null && !selector.isEmpty()) {
       event.data(SELECTOR + selector);
