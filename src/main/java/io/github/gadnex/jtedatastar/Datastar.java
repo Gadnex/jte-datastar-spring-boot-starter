@@ -16,8 +16,8 @@ public class Datastar {
   private final MessageSource messageSource;
 
   /**
-   * HTTP Request Header sent by all Datastar requests.
-   * Used by backend controller methods to filter incoming HTTP requests with this header.
+   * HTTP Request Header sent by all Datastar requests. Used by backend controller methods to filter
+   * incoming HTTP requests with this header.
    */
   public static final String REQUEST_HEADER = "Datastar-Request";
 

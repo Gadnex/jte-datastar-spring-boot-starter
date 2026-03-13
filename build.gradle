@@ -1,14 +1,15 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
 plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
-    id 'org.springframework.boot' version '4.0.1'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'pl.allegro.tech.build.axion-release' version '1.21.1'
-    id 'com.diffplug.spotless' version '8.1.0'
-    id 'io.spring.nullability' version '0.0.8'
+    id 'com.diffplug.spotless' version '8.3.0'
+    id 'io.spring.nullability' version '0.0.12'
+}
+
+ext {
+    springBootVersion = '4.0.3'
 }
 
 scmVersion {
@@ -35,13 +36,13 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom SpringBootPlugin.BOM_COORDINATES
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
     }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-    implementation 'gg.jte:jte-spring-boot-starter-3:3.2.1'
+    implementation 'gg.jte:jte-spring-boot-starter-4:3.2.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

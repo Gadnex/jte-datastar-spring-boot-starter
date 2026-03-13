@@ -25,8 +25,8 @@ For Spring Boot 3.x support, please use version **0.2.5**.
 ```xml
     <dependency>
         <groupId>gg.jte</groupId>
-        <artifactId>jte-spring-boot-starter-3</artifactId>
-        <version>3.2.1</version>
+        <artifactId>jte-spring-boot-starter-4</artifactId>
+        <version>3.2.3</version>
     </dependency>
     <dependency>
         <groupId>io.github.gadnex</groupId>
@@ -38,11 +38,11 @@ For Spring Boot 3.x support, please use version **0.2.5**.
 **Gradle**
 ```groovy
     plugins {
-        id 'gg.jte.gradle' version '3.2.1'
+        id 'gg.jte.gradle' version '3.2.3'
     }
 
     dependencies {
-        implementation 'gg.jte:jte-spring-boot-starter-3:3.2.1'
+        implementation 'gg.jte:jte-spring-boot-starter-4:3.2.3'
         implementation 'io.github.gadnex:jte-datastar-spring-boot-starter:${jteDatastarVersion}'
     }
 ```
