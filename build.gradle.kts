@@ -1,8 +1,9 @@
 plugins {
-    java
+    `java-library`
     `maven-publish`
     signing
     id("io.spring.dependency-management") version "1.1.7"
+    id("io.spring.nullability") version "0.0.12"
     id("pl.allegro.tech.build.axion-release") version "1.21.1"
     id("com.diffplug.spotless") version "8.3.0"
 }
