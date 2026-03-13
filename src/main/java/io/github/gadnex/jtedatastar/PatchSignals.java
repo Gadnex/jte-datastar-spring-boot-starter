@@ -49,10 +49,10 @@ public class PatchSignals extends AbstractDatastarEmitter {
    * Specify one or more signals to emit. Should be a valid data-signals attribute.
    *
    * @param name The signal name
-   * @param value The signal value
+   * @param value The signal value. Set to null to remove the signal from the browser.
    * @return The PatchSignals object
    */
-  public PatchSignals signal(String name, Object value) {
+  public PatchSignals signal(String name, @Nullable Object value) {
     signals.put(name, value);
     return this;
   }
