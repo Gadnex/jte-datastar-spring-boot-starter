@@ -5,7 +5,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("pl.allegro.tech.build.axion-release") version "1.21.1"
     id("com.diffplug.spotless") version "8.3.0"
-    id("io.spring.nullability") version "0.0.12"
 }
 
 scmVersion {
@@ -91,14 +90,6 @@ publishing {
 
 signing {
     sign(publishing.publications)
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.add("-parameters")
-}
-
-tasks.withType<Jar>().configureEach {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 spotless {
