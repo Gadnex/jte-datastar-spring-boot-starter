@@ -11,8 +11,7 @@ public class CapturingSseEmitter extends SseEmitter {
 
   @Override
   public void send(SseEmitter.SseEventBuilder eventBuilder) throws IOException {
-    Set<SseEmitter.DataWithMediaType> dataSet =
-        (Set<SseEmitter.DataWithMediaType>) eventBuilder.build();
+    Set<SseEmitter.DataWithMediaType> dataSet = eventBuilder.build();
     for (SseEmitter.DataWithMediaType data : dataSet) {
       emittedData.add(data.getData().toString());
     }
