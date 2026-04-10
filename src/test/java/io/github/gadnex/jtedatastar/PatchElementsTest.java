@@ -161,6 +161,19 @@ class PatchElementsTest implements WithAssertions {
   }
 
   @Test
+  void namespaceHTML() {
+    CapturingSseEmitter emitter = new CapturingSseEmitter();
+    datastar
+        .patchElements(emitter)
+        .namespace(Namespace.HTML)
+        .template("Hello")
+        .attribute("name", "John")
+        .emit();
+
+    assertThat(emitter.getEmittedData()).contains("data: namespace html");
+  }
+
+  @Test
   void namespaceSVG() {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar

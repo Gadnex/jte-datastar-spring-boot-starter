@@ -4,6 +4,8 @@ package io.github.gadnex.jtedatastar;
 public enum Namespace {
 
   /** Namespace for SVG images */
+  HTML(" namespace html"),
+  /** Namespace for SVG images */
   SVG(" namespace svg"),
   /** Namespace for MathML markup */
   MATHML(" namespace mathml");
