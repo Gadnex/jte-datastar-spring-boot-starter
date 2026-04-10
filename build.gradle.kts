@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("io.spring.nullability") version "0.0.12"
     id("pl.allegro.tech.build.axion-release") version "1.21.1"
-    id("com.diffplug.spotless") version "8.3.0"
+    id("com.diffplug.spotless") version "8.4.0"
 }
 
 scmVersion {
@@ -30,7 +30,7 @@ repositories {
     mavenCentral()
 }
 
-val springBootVersion by extra("4.0.3")
+val springBootVersion by extra("4.0.5")
 
 dependencyManagement {
     imports {
@@ -48,6 +48,17 @@ dependencies {
 
     // JUnit
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    
+    // Fix for the Mockito self-attachment warning
+    val mockitoAgent = configurations.testRuntimeClasspath.get()
+        .find { it.name.contains("mockito-core") }
+    if (mockitoAgent != null) {
+        jvmArgs("-javaagent:$mockitoAgent", "-Xshare:off")
+    }
 }
 
 publishing {
