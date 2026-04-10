@@ -1,5 +1,6 @@
 package io.github.gadnex.jtedatastar;
 
+import java.util.Map;
 import java.util.Set;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,15 @@ class PatchSignalsTest implements WithAssertions {
 
     assertThat(emitter.getEmittedData()).contains("data: signals {\"bar\":2,\"foo\":1}");
     assertThat(emitter2.getEmittedData()).contains("data: signals {\"bar\":2,\"foo\":1}");
+  }
+
+  @Test
+  void patchSignalsNested() {
+    CapturingSseEmitter emitter = new CapturingSseEmitter();
+    Map<String, String> user = Map.of("name", "Johnny");
+    datastar.patchSignals(emitter).signal("user", user).emit();
+
+    assertThat(emitter.getEmittedData()).contains("data: signals {\"user\":{\"name\":\"Johnny\"}}");
   }
 
   @Test
