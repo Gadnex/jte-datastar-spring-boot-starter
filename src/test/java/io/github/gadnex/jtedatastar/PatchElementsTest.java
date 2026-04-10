@@ -143,14 +143,11 @@ class PatchElementsTest implements WithAssertions {
   @Test
   void patchModeRemove() {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
-    datastar
-        .patchElements(emitter)
-        .patchMode(PatchMode.REMOVE)
-        .template("Hello")
-        .attribute("name", "John")
-        .emit();
+    datastar.patchElements(emitter).selector("#greeting").patchMode(PatchMode.REMOVE).emit();
 
-    assertThat(emitter.getEmittedData()).contains("data: mode remove");
+    assertThat(emitter.getEmittedData())
+        .contains("data: mode remove")
+        .contains("data: selector #greeting");
   }
 
   @Test
