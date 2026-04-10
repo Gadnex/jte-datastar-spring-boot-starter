@@ -15,8 +15,10 @@ class PatchElementsTest implements WithAssertions {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchElements(emitter).template("Hello").attribute("name", "John").emit();
 
-    assertThat(emitter.getEmittedData()).hasSize(7);
-    assertThat(emitter.getEmittedData().get(3)).contains("Hello John!");
+    assertThat(emitter.getEmittedData())
+        .contains("data: elements <div id=\"greeting\">")
+        .contains("data: elements Hello John!")
+        .contains("data: elements </div>");
   }
 
   @Test
@@ -24,7 +26,7 @@ class PatchElementsTest implements WithAssertions {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchElements(emitter).template("Hello").attribute("name", "John").emit();
 
-    assertThat(emitter.getEmittedData().get(0)).contains("event: datastar-patch-elements");
+    assertThat(emitter.getEmittedData()).contains("event: datastar-patch-elements");
   }
 
   @Test
@@ -37,7 +39,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("selector #foo");
+    assertThat(emitter.getEmittedData()).contains("data: selector #foo");
   }
 
   @Test
@@ -50,7 +52,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("mode outer");
+    assertThat(emitter.getEmittedData()).contains("data: mode outer");
   }
 
   @Test
@@ -63,7 +65,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("mode inner");
+    assertThat(emitter.getEmittedData()).contains("data: mode inner");
   }
 
   @Test
@@ -76,7 +78,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("mode replace");
+    assertThat(emitter.getEmittedData()).contains("data: mode replace");
   }
 
   @Test
@@ -89,7 +91,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("mode prepend");
+    assertThat(emitter.getEmittedData()).contains("data: mode prepend");
   }
 
   @Test
@@ -102,7 +104,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("mode append");
+    assertThat(emitter.getEmittedData()).contains("data: mode append");
   }
 
   @Test
@@ -115,7 +117,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("mode before");
+    assertThat(emitter.getEmittedData()).contains("data: mode before");
   }
 
   @Test
@@ -128,7 +130,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("mode after");
+    assertThat(emitter.getEmittedData()).contains("data: mode after");
   }
 
   @Test
@@ -141,7 +143,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("mode remove");
+    assertThat(emitter.getEmittedData()).contains("data: mode remove");
   }
 
   @Test
@@ -154,7 +156,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("namespace svg");
+    assertThat(emitter.getEmittedData()).contains("data: namespace svg");
   }
 
   @Test
@@ -167,7 +169,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("namespace mathml");
+    assertThat(emitter.getEmittedData()).contains("data: namespace mathml");
   }
 
   @Test
@@ -180,7 +182,7 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("useViewTransition true");
+    assertThat(emitter.getEmittedData()).contains("data: useViewTransition true");
   }
 
   @Test
@@ -193,14 +195,6 @@ class PatchElementsTest implements WithAssertions {
         .attribute("name", "John")
         .emit();
 
-    assertThat(emitter.getEmittedData().get(1)).contains("useViewTransition false");
-  }
-
-  @Test
-  void elements() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
-    datastar.patchElements(emitter).template("Hello").attribute("name", "John").emit();
-
-    assertThat(emitter.getEmittedData().get(1)).contains("elements");
+    assertThat(emitter.getEmittedData()).contains("data: useViewTransition false");
   }
 }
