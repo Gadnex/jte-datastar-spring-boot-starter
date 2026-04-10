@@ -151,6 +151,16 @@ class PatchElementsTest implements WithAssertions {
   }
 
   @Test
+  void patchModeRemoveMultiple() {
+    CapturingSseEmitter emitter = new CapturingSseEmitter();
+    datastar.patchElements(emitter).selector("#feed, #otherid").patchMode(PatchMode.REMOVE).emit();
+
+    assertThat(emitter.getEmittedData())
+        .contains("data: mode remove")
+        .contains("data: selector #feed, #otherid");
+  }
+
+  @Test
   void namespaceSVG() {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
