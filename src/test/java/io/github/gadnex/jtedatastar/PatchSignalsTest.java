@@ -15,23 +15,23 @@ class PatchSignalsTest implements WithAssertions {
   @Test
   void patchSignals() {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
-    CapturingSseEmitter emitter2 = new CapturingSseEmitter();
-    Set<SseEmitter> emitters = Set.of(emitter, emitter2);
-    datastar.patchSignals(emitters).signal("foo", 1).signal("bar", 2).emit();
-
-    assertThat(emitter.getEmittedData()).contains("data: signals {\"bar\":2,\"foo\":1}");
-    assertThat(emitter2.getEmittedData()).contains("data: signals {\"bar\":2,\"foo\":1}");
-  }
-
-  @Test
-  void patchSignalsMultipleEmitters() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchSignals(emitter).signal("foo", 1).signal("bar", 2).emit();
 
     assertThat(emitter.getEmittedData())
         .contains("id:")
         .contains("event: datastar-patch-signals")
         .contains("data: signals {\"bar\":2,\"foo\":1}");
+  }
+
+  @Test
+  void patchSignalsMultipleEmitters() {
+    CapturingSseEmitter emitter = new CapturingSseEmitter();
+    CapturingSseEmitter emitter2 = new CapturingSseEmitter();
+    Set<SseEmitter> emitters = Set.of(emitter, emitter2);
+    datastar.patchSignals(emitters).signal("foo", 1).signal("bar", 2).emit();
+
+    assertThat(emitter.getEmittedData()).contains("data: signals {\"bar\":2,\"foo\":1}");
+    assertThat(emitter2.getEmittedData()).contains("data: signals {\"bar\":2,\"foo\":1}");
   }
 
   @Test
