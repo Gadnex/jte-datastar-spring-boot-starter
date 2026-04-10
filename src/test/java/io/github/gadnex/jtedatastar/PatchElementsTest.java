@@ -20,6 +20,14 @@ class PatchElementsTest implements WithAssertions {
   }
 
   @Test
+  void eventType() {
+    CapturingSseEmitter emitter = new CapturingSseEmitter();
+    datastar.patchElements(emitter).template("Hello").attribute("name", "John").emit();
+
+    assertThat(emitter.getEmittedData().get(0)).contains("event: datastar-patch-elements");
+  }
+
+  @Test
   void selector() {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
