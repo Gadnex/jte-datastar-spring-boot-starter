@@ -36,6 +36,14 @@ class PatchSignalsTest implements WithAssertions {
   }
 
   @Test
+  void removeSignal() {
+    CapturingSseEmitter emitter = new CapturingSseEmitter();
+    datastar.patchSignals(emitter).signal("key", null).emit();
+
+    assertThat(emitter.getEmittedData()).contains("data: signals {\"key\":null}");
+  }
+
+  @Test
   void patchSignalsNested() {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
     Map<String, String> user = Map.of("name", "Johnny");
