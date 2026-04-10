@@ -1,9 +1,11 @@
 package io.github.gadnex.jtedatastar;
 
+import java.util.Set;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @SpringBootTest
 class PatchElementsTest implements WithAssertions {
@@ -16,17 +18,22 @@ class PatchElementsTest implements WithAssertions {
     datastar.patchElements(emitter).template("Hello").attribute("name", "John").emit();
 
     assertThat(emitter.getEmittedData())
+        .contains("id:")
+        .contains("event: datastar-patch-elements")
         .contains("data: elements <div id=\"greeting\">")
         .contains("data: elements Hello John!")
         .contains("data: elements </div>");
   }
 
   @Test
-  void eventType() {
+  void patchElementsMultipleEmitters() {
     CapturingSseEmitter emitter = new CapturingSseEmitter();
-    datastar.patchElements(emitter).template("Hello").attribute("name", "John").emit();
+    CapturingSseEmitter emitter2 = new CapturingSseEmitter();
+    Set<SseEmitter> emitters = Set.of(emitter, emitter2);
+    datastar.patchElements(emitters).template("Hello").attribute("name", "John").emit();
 
-    assertThat(emitter.getEmittedData()).contains("event: datastar-patch-elements");
+    assertThat(emitter.getEmittedData()).contains("data: elements Hello John!");
+    assertThat(emitter2.getEmittedData()).contains("data: elements Hello John!");
   }
 
   @Test

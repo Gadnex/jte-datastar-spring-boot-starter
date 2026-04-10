@@ -1,9 +1,11 @@
 package io.github.gadnex.jtedatastar;
 
+import java.util.Set;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @SpringBootTest
 class ExecuteScriptTest implements WithAssertions {
@@ -23,6 +25,17 @@ class ExecuteScriptTest implements WithAssertions {
         .contains("data: elements <script>")
         .contains("data: elements alert('Hello World!');")
         .contains("data: elements </script>");
+  }
+
+  @Test
+  void executeScriptMultipleEmitters() {
+    CapturingSseEmitter emitter = new CapturingSseEmitter();
+    CapturingSseEmitter emitter2 = new CapturingSseEmitter();
+    Set<SseEmitter> emitters = Set.of(emitter, emitter2);
+    datastar.executeScript(emitters).script("alert('Hello World!');").emit();
+
+    assertThat(emitter.getEmittedData()).contains("data: elements alert('Hello World!');");
+    assertThat(emitter2.getEmittedData()).contains("data: elements alert('Hello World!');");
   }
 
   @Test
