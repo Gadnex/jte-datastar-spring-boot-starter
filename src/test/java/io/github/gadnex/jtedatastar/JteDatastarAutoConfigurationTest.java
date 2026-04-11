@@ -14,4 +14,9 @@ class JteDatastarAutoConfigurationTest implements WithAssertions {
   void datastarBeanCreated() {
     assertThat(datastar).isNotNull();
   }
+
+  @Test
+  void datastarRequestHeader() {
+    assertThat(Datastar.REQUEST_HEADER).isEqualTo("Datastar-Request");
+  }
 }
