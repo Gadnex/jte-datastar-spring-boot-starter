@@ -3,9 +3,9 @@ plugins {
     `maven-publish`
     signing
     id("io.spring.dependency-management") version "1.1.7"
-    id("io.spring.nullability") version "0.0.12"
-    id("pl.allegro.tech.build.axion-release") version "1.21.1"
-    id("com.diffplug.spotless") version "8.4.0"
+    id("io.spring.nullability") version "0.0.13"
+    id("pl.allegro.tech.build.axion-release") version "1.21.2"
+    id("com.diffplug.spotless") version "8.6.0"
 }
 
 scmVersion {
@@ -30,7 +30,7 @@ repositories {
     mavenCentral()
 }
 
-val springBootVersion by extra("4.0.5")
+val springBootVersion by extra("4.0.6")
 
 dependencyManagement {
     imports {
@@ -44,7 +44,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 
     // JTE
-    implementation("gg.jte:jte-spring-boot-starter-4:3.2.3")
+    implementation("gg.jte:jte-spring-boot-starter-4:3.2.4")
 
     // JUnit
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
