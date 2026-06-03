@@ -224,4 +224,17 @@ class PatchElementsTest implements WithAssertions {
 
     assertThat(emitter.getEmittedData()).contains("data: useViewTransition false");
   }
+
+  @Test
+  void viewTransitionSelector() {
+    CapturingSseEmitter emitter = new CapturingSseEmitter();
+    datastar
+        .patchElements(emitter)
+        .viewTransitionSelector("#mySelector")
+        .template("Hello")
+        .attribute("name", "John")
+        .emit();
+
+    assertThat(emitter.getEmittedData()).contains("data: viewTransitionSelector #mySelector");
+  }
 }

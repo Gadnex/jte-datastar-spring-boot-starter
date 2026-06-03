@@ -28,11 +28,13 @@ public class PatchElements extends AbstractDatastarEmitter {
   private @Nullable PatchMode patchMode;
   private @Nullable Namespace namespace;
   private @Nullable Boolean useViewTransition;
+  private @Nullable String viewTransitionSelector;
 
   private static final String LOCALIZER = "localizer";
   private static final String DATASTAR_PATCH_ELEMENTS = " datastar-patch-elements";
   private static final String SELECTOR = " selector ";
   private static final String USE_VIEW_TRANSITION = " useViewTransition ";
+  private static final String VIEW_TRANSITION_SELECTOR = " viewTransitionSelector ";
   private static final String ELEMENTS_DATALINE_LITERAL = " elements ";
 
   /**
@@ -137,6 +139,11 @@ public class PatchElements extends AbstractDatastarEmitter {
     return this;
   }
 
+  public PatchElements viewTransitionSelector(String viewTransitionSelector) {
+    this.viewTransitionSelector = viewTransitionSelector.trim();
+    return this;
+  }
+
   /** Emit the SSE event */
   public void emit() {
     if ((patchMode != PatchMode.REMOVE) && (template == null)) {
@@ -154,6 +161,9 @@ public class PatchElements extends AbstractDatastarEmitter {
     }
     if (useViewTransition != null) {
       event.data(USE_VIEW_TRANSITION + useViewTransition);
+    }
+    if (viewTransitionSelector != null && !viewTransitionSelector.isEmpty()) {
+      event.data(VIEW_TRANSITION_SELECTOR + viewTransitionSelector);
     }
     if (template != null) {
       String html = renderHtmlElement();
