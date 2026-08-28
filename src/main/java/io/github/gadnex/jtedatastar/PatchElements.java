@@ -139,6 +139,12 @@ public class PatchElements extends AbstractDatastarEmitter {
     return this;
   }
 
+  /**
+   * Set the view transition selector
+   *
+   * @param viewTransitionSelector The view transition selector
+   * @return The PatchElementsobject
+   */
   public PatchElements viewTransitionSelector(String viewTransitionSelector) {
     this.viewTransitionSelector = viewTransitionSelector.trim();
     return this;

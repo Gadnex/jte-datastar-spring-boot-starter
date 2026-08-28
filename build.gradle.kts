@@ -3,9 +3,9 @@ plugins {
     `maven-publish`
     signing
     id("io.spring.dependency-management") version "1.1.7"
-    id("io.spring.nullability") version "0.0.13"
-    id("pl.allegro.tech.build.axion-release") version "1.21.2"
-    id("com.diffplug.spotless") version "8.6.0"
+    id("io.spring.nullability") version "0.0.15"
+    id("pl.allegro.tech.build.axion-release") version "1.21.3"
+    id("com.diffplug.spotless") version "8.10.0"
 }
 
 scmVersion {
@@ -30,7 +30,8 @@ repositories {
     mavenCentral()
 }
 
-val springBootVersion by extra("4.0.6")
+val springBootVersion = "4.1.1"
+val jteVersion = "3.2.4"
 
 dependencyManagement {
     imports {
@@ -44,7 +45,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 
     // JTE
-    implementation("gg.jte:jte-spring-boot-starter-4:3.2.4")
+    implementation("gg.jte:jte-spring-boot-starter-4:$jteVersion")
 
     // JUnit
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -87,7 +88,7 @@ publishing {
                 scm {
                     connection.set("scm:git@github.com:Gadnex/jte-datastar-spring-boot-starter.git")
                     developerConnection.set("scm:git:ssh://github.com/Gadnex/jte-datastar-spring-boot-starter.git")
-                    url.set("http://github.com/Gadnex/jte-datastar-spring-boot-starter.git")
+                    url.set("https://github.com/Gadnex/jte-datastar-spring-boot-starter.git")
                 }
             }
         }
