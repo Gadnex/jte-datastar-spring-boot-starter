@@ -1,4 +1,4 @@
-package io.github.gadnex.jtedatastar;
+package io.github.gadnex.jtedatastar.sse;
 
 import java.io.IOException;
 import java.util.Set;

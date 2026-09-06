@@ -47,6 +47,9 @@ dependencies {
     // JTE
     implementation("gg.jte:jte-spring-boot-starter-4:$jteVersion")
 
+    // Spring Security for testing
+    testImplementation("org.springframework.security:spring-security-web")
+
     // JUnit
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

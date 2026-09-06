@@ -1,0 +1,40 @@
+{
+  "groups": [
+    {
+      "name": "datastar.csp",
+      "type": "io.github.gadnex.jtedatastar.JteDatastarCspProperties",
+      "sourceType": "io.github.gadnex.jtedatastar.JteDatastarCspProperties",
+      "description": "JTE Datastar Content-Security-Policy (CSP) configuration properties."
+    },
+    {
+      "name": "datastar.sse",
+      "type": "io.github.gadnex.jtedatastar.JteDatastarSseProperties",
+      "sourceType": "io.github.gadnex.jtedatastar.JteDatastarSseProperties",
+      "description": "JTE Datastar Server-Sent Events (SSE) configuration properties."
+    }
+  ],
+  "properties": [
+    {
+      "name": "datastar.csp.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable Datastar Content-Security-Policy (CSP) nonce generation and binding to the request lifecycle.",
+      "sourceType": "io.github.gadnex.jtedatastar.JteDatastarCspProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "datastar.csp.csp-header",
+      "type": "java.lang.Boolean",
+      "description": "Whether to add the Content-Security-Policy header to the HTTP response using the fallback filter when Spring Security is not present.",
+      "sourceType": "io.github.gadnex.jtedatastar.JteDatastarCspProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "datastar.sse.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the Datastar Server-Sent Events (SSE) bean and emitter support.",
+      "sourceType": "io.github.gadnex.jtedatastar.JteDatastarSseProperties",
+      "defaultValue": true
+    }
+  ],
+  "hints": []
+}

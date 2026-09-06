@@ -1,4 +1,4 @@
-package io.github.gadnex.jtedatastar;
+package io.github.gadnex.jtedatastar.sse;
 
 /**
  * The patch mode used by Datastar when updating HTML in the browser upon receiving a PatchElements

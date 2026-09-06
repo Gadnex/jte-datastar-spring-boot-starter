@@ -1,4 +1,4 @@
-package io.github.gadnex.jtedatastar;
+package io.github.gadnex.jtedatastar.sse;
 
 import java.util.Set;
 import java.util.UUID;

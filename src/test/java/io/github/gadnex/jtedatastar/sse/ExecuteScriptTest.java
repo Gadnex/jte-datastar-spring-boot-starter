@@ -1,20 +1,38 @@
-package io.github.gadnex.jtedatastar;
+package io.github.gadnex.jtedatastar.sse;
 
+import gg.jte.ContentType;
+import gg.jte.TemplateEngine;
+import gg.jte.resolve.DirectoryCodeResolver;
+import java.nio.file.Path;
 import java.util.Set;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
+import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-@SpringBootTest
 class ExecuteScriptTest implements WithAssertions {
 
-  @Autowired private Datastar datastar;
+  private static Datastar datastar;
+  private CapturingSseEmitter emitter;
+
+  @BeforeAll
+  static void initDatastar() {
+    TemplateEngine templateEngine =
+        TemplateEngine.create(new DirectoryCodeResolver(Path.of("src/main/jte")), ContentType.Html);
+    MessageSource messageSource = Mockito.mock(MessageSource.class);
+    datastar = new Datastar(templateEngine, ".jte", messageSource);
+  }
+
+  @BeforeEach
+  void setUp() {
+    emitter = new CapturingSseEmitter();
+  }
 
   @Test
   void executeScript() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.executeScript(emitter).script("alert('Hello World!');").emit();
 
     assertThat(emitter.getEmittedData())
@@ -29,7 +47,6 @@ class ExecuteScriptTest implements WithAssertions {
 
   @Test
   void executeScriptMultipleEmitters() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     CapturingSseEmitter emitter2 = new CapturingSseEmitter();
     Set<SseEmitter> emitters = Set.of(emitter, emitter2);
     datastar.executeScript(emitters).script("alert('Hello World!');").emit();
@@ -40,7 +57,6 @@ class ExecuteScriptTest implements WithAssertions {
 
   @Test
   void scriptAttribute() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .executeScript(emitter)
         .attribute("referrerpolicy", "origin")
@@ -53,7 +69,6 @@ class ExecuteScriptTest implements WithAssertions {
 
   @Test
   void scriptAttributeWithNullValue() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .executeScript(emitter)
         .attribute("defer", null)
@@ -65,7 +80,6 @@ class ExecuteScriptTest implements WithAssertions {
 
   @Test
   void autoRemoveTrue() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.executeScript(emitter).autoRemove(true).script("alert('Hello World!');").emit();
 
     assertThat(emitter.getEmittedData())
@@ -74,7 +88,6 @@ class ExecuteScriptTest implements WithAssertions {
 
   @Test
   void autoRemoveFalse() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.executeScript(emitter).autoRemove(false).script("alert('Hello World!');").emit();
 
     assertThat(emitter.getEmittedData()).contains("data: elements <script>");

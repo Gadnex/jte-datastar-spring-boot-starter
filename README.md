@@ -111,3 +111,72 @@ We also remove the SseEmitter from the data structure on error, completion and t
 
 If we want to send future events to the SSE emitter, we should not complete
 the emitter.
+
+### Configuration
+
+The Datastar Spring Bean is autoconfigured without any required configuration.
+
+You can explicitly enable/disbale the autoconfiguration of the bean using the application property:
+
+```properties
+datastar.sse.enabled=true // enabled
+
+datastar.sse.enabled=false // disabled
+```
+
+## CSP Mode
+
+Datastar version 1.0.3 introduced a new [CSP mode](https://data-star.dev/reference/security#csp-mode) feature.
+The JTE Datastar Spring Boot starter adds support for CSP mode by automatically generating a nonce value and adding it to the HTTP request with the key `cspNonce`.
+It also adds a `@param String nonce` to your Spring MVC model as an `@ControllerAdvice` `@ModelAttribute("nonce")`.
+
+CSP mode is not enabled by default, but you can enable/disbale the autoconfiguration of the bean using the application property:
+
+```properties
+datastar.csp.enabled=true // enabled
+
+datastar.csp.enabled=false // disabled
+```
+
+In your JTE layout template with the `html` tag add the following:
+
+```html
+@param String nonce
+
+<html data-nonce="${nonce}">
+```
+
+## CSP Response Header
+
+In order to enable CSP in your browser, it is recommended to use an HTTP response header instead of a `meta` tag in the HTML `head` tag.
+
+This is your own responsibility, but the starter does offer a filter that can be used if no Spring Security is enabled.
+
+The CSP response header is not enabled by default, but you can enable/disbale the autoconfiguration of the bean using the application property:
+
+```properties
+datastar.csp.csp-header=true // enabled
+
+datastar.csp.csp-header=false // disabled
+```
+
+When using Spring Security, the fallback filter is automatically disabled.
+You can configure the CSP header in your `SecurityFilterChain` using a `HeaderWriter`:
+
+```java
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.headers(headers -> headers
+        .addHeaderWriter((request, response) -> {
+            String nonce = (String) request.getAttribute(CspRequestNonceFilter.NONCE_ATTRIBUTE);
+            if (nonce != null && !response.containsHeader("Content-Security-Policy")) {
+                response.setHeader(
+                    "Content-Security-Policy",
+                    "default-src 'self'; script-src 'self' 'nonce-" + nonce + "'; trusted-types datastar; require-trusted-types-for 'script';"
+                );
+            }
+        })
+    );
+    return http.build();
+}
+```

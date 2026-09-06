@@ -1,20 +1,38 @@
-package io.github.gadnex.jtedatastar;
+package io.github.gadnex.jtedatastar.sse;
 
+import gg.jte.ContentType;
+import gg.jte.TemplateEngine;
+import gg.jte.resolve.DirectoryCodeResolver;
+import java.nio.file.Path;
 import java.util.Set;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
+import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-@SpringBootTest
 class PatchElementsTest implements WithAssertions {
 
-  @Autowired private Datastar datastar;
+  private static Datastar datastar;
+  private CapturingSseEmitter emitter;
+
+  @BeforeAll
+  static void initDatastar() {
+    TemplateEngine templateEngine =
+        TemplateEngine.create(new DirectoryCodeResolver(Path.of("src/main/jte")), ContentType.Html);
+    MessageSource messageSource = Mockito.mock(MessageSource.class);
+    datastar = new Datastar(templateEngine, ".jte", messageSource);
+  }
+
+  @BeforeEach
+  void setUp() {
+    emitter = new CapturingSseEmitter();
+  }
 
   @Test
   void patchElements() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchElements(emitter).template("Hello").attribute("name", "John").emit();
 
     assertThat(emitter.getEmittedData())
@@ -27,7 +45,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchElementsMultipleEmitters() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     CapturingSseEmitter emitter2 = new CapturingSseEmitter();
     Set<SseEmitter> emitters = Set.of(emitter, emitter2);
     datastar.patchElements(emitters).template("Hello").attribute("name", "John").emit();
@@ -38,7 +55,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void selector() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .selector("#foo")
@@ -51,7 +67,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModeOuter() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .patchMode(PatchMode.OUTER)
@@ -64,7 +79,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModeInner() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .patchMode(PatchMode.INNER)
@@ -77,7 +91,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModeReplace() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .patchMode(PatchMode.REPLACE)
@@ -90,7 +103,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModePrepend() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .patchMode(PatchMode.PREPEND)
@@ -103,7 +115,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModeAppend() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .patchMode(PatchMode.APPEND)
@@ -116,7 +127,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModeBefore() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .patchMode(PatchMode.BEFORE)
@@ -129,7 +139,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModeAfter() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .patchMode(PatchMode.AFTER)
@@ -142,7 +151,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModeRemove() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchElements(emitter).selector("#greeting").patchMode(PatchMode.REMOVE).emit();
 
     assertThat(emitter.getEmittedData())
@@ -152,7 +160,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void patchModeRemoveMultiple() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchElements(emitter).selector("#feed, #otherid").patchMode(PatchMode.REMOVE).emit();
 
     assertThat(emitter.getEmittedData())
@@ -162,7 +169,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void namespaceHTML() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .namespace(Namespace.HTML)
@@ -175,7 +181,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void namespaceSVG() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .namespace(Namespace.SVG)
@@ -188,7 +193,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void namespaceMathML() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .namespace(Namespace.MATHML)
@@ -201,7 +205,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void useViewTransitionTrue() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .useViewTransition(true)
@@ -214,7 +217,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void useViewTransitionFalse() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .useViewTransition(false)
@@ -227,7 +229,6 @@ class PatchElementsTest implements WithAssertions {
 
   @Test
   void viewTransitionSelector() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar
         .patchElements(emitter)
         .viewTransitionSelector("#mySelector")

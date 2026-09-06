@@ -1,4 +1,4 @@
-package io.github.gadnex.jtedatastar;
+package io.github.gadnex.jtedatastar.sse;
 
 import gg.jte.TemplateEngine;
 import gg.jte.output.StringOutput;

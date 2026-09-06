@@ -1,4 +1,4 @@
-package io.github.gadnex.jtedatastar;
+package io.github.gadnex.jtedatastar.sse;
 
 /** The namespace used by Datastar when pathing special DOM elements such as SVG or MathML. */
 public enum Namespace {

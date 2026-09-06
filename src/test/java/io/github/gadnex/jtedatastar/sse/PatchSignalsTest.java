@@ -1,21 +1,39 @@
-package io.github.gadnex.jtedatastar;
+package io.github.gadnex.jtedatastar.sse;
 
+import gg.jte.ContentType;
+import gg.jte.TemplateEngine;
+import gg.jte.resolve.DirectoryCodeResolver;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
+import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-@SpringBootTest
 class PatchSignalsTest implements WithAssertions {
 
-  @Autowired private Datastar datastar;
+  private static Datastar datastar;
+  private CapturingSseEmitter emitter;
+
+  @BeforeAll
+  static void initDatastar() {
+    TemplateEngine templateEngine =
+        TemplateEngine.create(new DirectoryCodeResolver(Path.of("src/main/jte")), ContentType.Html);
+    MessageSource messageSource = Mockito.mock(MessageSource.class);
+    datastar = new Datastar(templateEngine, ".jte", messageSource);
+  }
+
+  @BeforeEach
+  void setUp() {
+    emitter = new CapturingSseEmitter();
+  }
 
   @Test
   void patchSignals() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchSignals(emitter).signal("foo", 1).signal("bar", 2).emit();
 
     assertThat(emitter.getEmittedData())
@@ -26,7 +44,6 @@ class PatchSignalsTest implements WithAssertions {
 
   @Test
   void patchSignalsMultipleEmitters() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     CapturingSseEmitter emitter2 = new CapturingSseEmitter();
     Set<SseEmitter> emitters = Set.of(emitter, emitter2);
     datastar.patchSignals(emitters).signal("foo", 1).signal("bar", 2).emit();
@@ -37,7 +54,6 @@ class PatchSignalsTest implements WithAssertions {
 
   @Test
   void removeSignal() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchSignals(emitter).signal("key", null).emit();
 
     assertThat(emitter.getEmittedData()).contains("data: signals {\"key\":null}");
@@ -45,7 +61,6 @@ class PatchSignalsTest implements WithAssertions {
 
   @Test
   void patchSignalsNested() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     Map<String, String> user = Map.of("name", "Johnny");
     datastar.patchSignals(emitter).signal("user", user).emit();
 
@@ -54,7 +69,6 @@ class PatchSignalsTest implements WithAssertions {
 
   @Test
   void onlyIfMissingTrue() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchSignals(emitter).onlyIfMissing(true).signal("foo", 1).emit();
 
     assertThat(emitter.getEmittedData()).contains("onlyIfMissing true");
@@ -62,7 +76,6 @@ class PatchSignalsTest implements WithAssertions {
 
   @Test
   void onlyIfMissingFalse() {
-    CapturingSseEmitter emitter = new CapturingSseEmitter();
     datastar.patchSignals(emitter).onlyIfMissing(false).signal("foo", 1).emit();
 
     assertThat(emitter.getEmittedData()).contains("onlyIfMissing false");
