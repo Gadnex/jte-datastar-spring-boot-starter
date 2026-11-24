@@ -15,9 +15,9 @@ The following needs to be done to use the starter on your project.
 
 ### Spring Boot version
 
-Version **0.3.x** and later of **jte-datastar-spring-boot-starter** is based on Spring Boot 4.x and does not work with Spring Boot 3.x.
-
-For Spring Boot 3.x support, please use version **0.2.5**.
+- Version **0.4.x** supports Spring Boot 4.2.x.
+- Version **0.3.5** supports Spring Boot 4.0.x and 4.1.x.
+- Version **0.2.5** supports Spring Boot 3.x.
 
 ### Add the required dependencies
 
@@ -26,7 +26,7 @@ For Spring Boot 3.x support, please use version **0.2.5**.
     <dependency>
         <groupId>gg.jte</groupId>
         <artifactId>jte-spring-boot-starter-4</artifactId>
-        <version>3.2.4</version>
+        <version>3.2.5</version>
     </dependency>
     <dependency>
         <groupId>io.github.gadnex</groupId>
@@ -38,11 +38,11 @@ For Spring Boot 3.x support, please use version **0.2.5**.
 **Gradle**
 ```groovy
     plugins {
-        id 'gg.jte.gradle' version '3.2.4'
+        id 'gg.jte.gradle' version '3.2.5'
     }
 
     dependencies {
-        implementation 'gg.jte:jte-spring-boot-starter-4:3.2.4'
+        implementation 'gg.jte:jte-spring-boot-starter-4:3.2.5'
         implementation 'io.github.gadnex:jte-datastar-spring-boot-starter:${jteDatastarVersion}'
     }
 ```
@@ -63,16 +63,15 @@ SSE events need to be emitted from a separate thread, therefore we:
     @GetMapping("do-something")
     public SseEmitter doSomething() {
         SseEmitter sseEmitter = new SseEmitter();
-        EXECUTOR.execute(
-                () -> {
-                    // Perform business logic here
-                    var something = "Business logic result";
-                    datastar.patchElements(sseEmitter)
-                            .template("TemplateName")
-                            .attribute("something", something)
-                            .emit();
-                    sseEmitter.complete();
-                });
+        EXECUTOR.execute(() -> {
+            // Perform business logic here
+            var something = "Business logic result";
+            datastar.patchElements(sseEmitter)
+                    .template("TemplateName")
+                    .attribute("something", something)
+                    .emit();
+            sseEmitter.complete();
+        });
         return sseEmitter;
     }
 ```

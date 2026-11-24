@@ -32,10 +32,10 @@ public class PatchElements extends AbstractDatastarEmitter {
 
   private static final String LOCALIZER = "localizer";
   private static final String DATASTAR_PATCH_ELEMENTS = " datastar-patch-elements";
-  private static final String SELECTOR = " selector ";
-  private static final String USE_VIEW_TRANSITION = " useViewTransition ";
-  private static final String VIEW_TRANSITION_SELECTOR = " viewTransitionSelector ";
-  private static final String ELEMENTS_DATALINE_LITERAL = " elements ";
+  private static final String SELECTOR = "selector ";
+  private static final String USE_VIEW_TRANSITION = "useViewTransition ";
+  private static final String VIEW_TRANSITION_SELECTOR = "viewTransitionSelector ";
+  private static final String ELEMENTS_DATALINE_LITERAL = "elements ";
 
   /**
    * Constructor for creating the PatchElements emitter

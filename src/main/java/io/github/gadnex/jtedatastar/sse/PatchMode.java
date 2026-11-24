@@ -6,21 +6,21 @@ package io.github.gadnex.jtedatastar.sse;
  */
 public enum PatchMode {
   /** Patches the element’s outerHTML using Idiomorph. This is the default mode. */
-  OUTER(" mode outer"),
+  OUTER("mode outer"),
   /** Patches the element’s innerHTML using Idiomorph. */
-  INNER(" mode inner"),
+  INNER("mode inner"),
   /** Replaces the element’s outerHTML. */
-  REPLACE(" mode replace"),
+  REPLACE("mode replace"),
   /** Prepends the element to the target’s children. */
-  PREPEND(" mode prepend"),
+  PREPEND("mode prepend"),
   /** Appends the element to the target’s children. */
-  APPEND(" mode append"),
+  APPEND("mode append"),
   /** Inserts the element before the target as a sibling. */
-  BEFORE(" mode before"),
+  BEFORE("mode before"),
   /** Inserts the element after the target as a sibling. */
-  AFTER(" mode after"),
+  AFTER("mode after"),
   /** Remove the target element. */
-  REMOVE(" mode remove");
+  REMOVE("mode remove");
 
   private final String output;
 

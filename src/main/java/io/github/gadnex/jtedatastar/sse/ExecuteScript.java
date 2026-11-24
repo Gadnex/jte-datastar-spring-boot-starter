@@ -16,8 +16,8 @@ public class ExecuteScript extends AbstractDatastarEmitter {
   private final StringBuilder attributes = new StringBuilder();
 
   private static final String DATASTAR_PATCH_ELEMENTS = " datastar-patch-elements";
-  private static final String SELECTOR = " selector body";
-  private static final String ELEMENTS_DATALINE_LITERAL = " elements ";
+  private static final String SELECTOR = "selector body";
+  private static final String ELEMENTS_DATALINE_LITERAL = "elements ";
 
   /**
    * Constructor for creating the ExecuteScript emitter

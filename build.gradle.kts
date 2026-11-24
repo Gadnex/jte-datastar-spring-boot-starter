@@ -3,9 +3,9 @@ plugins {
     `maven-publish`
     signing
     id("io.spring.dependency-management") version "1.1.7"
-    id("io.spring.nullability") version "0.0.15"
-    id("pl.allegro.tech.build.axion-release") version "1.21.3"
-    id("com.diffplug.spotless") version "8.10.0"
+    id("io.spring.nullability") version "0.0.18"
+    id("pl.allegro.tech.build.axion-release") version "1.21.5"
+    id("com.diffplug.spotless") version "8.12.0"
 }
 
 scmVersion {
@@ -30,8 +30,8 @@ repositories {
     mavenCentral()
 }
 
-val springBootVersion = "4.1.1"
-val jteVersion = "3.2.4"
+val springBootVersion = "4.2.0"
+val jteVersion = "3.2.5"
 
 dependencyManagement {
     imports {

@@ -52,11 +52,10 @@ class JteDatastarAutoConfigurationTest implements WithAssertions {
 
       contextRunner
           .withBean("customDatastar", Datastar.class, () -> customDatastar)
-          .run(
-              context -> {
-                assertThat(context.getBeanNamesForType(Datastar.class))
-                    .containsExactly("customDatastar");
-              });
+          .run(context -> {
+            assertThat(context.getBeanNamesForType(Datastar.class))
+                .containsExactly("customDatastar");
+          });
     }
 
     @Test

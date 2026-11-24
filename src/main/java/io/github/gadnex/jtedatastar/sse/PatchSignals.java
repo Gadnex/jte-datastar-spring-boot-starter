@@ -20,8 +20,8 @@ public class PatchSignals extends AbstractDatastarEmitter {
   private @Nullable Boolean onlyIfMissing;
 
   private static final String DATASTAR_PATCH_SIGNALS = " datastar-patch-signals";
-  private static final String ONLY_IF_MISSING = " onlyIfMissing ";
-  private static final String SIGNALS = " signals ";
+  private static final String ONLY_IF_MISSING = "onlyIfMissing ";
+  private static final String SIGNALS = "signals ";
 
   /**
    * Constructor for creating the PatchSignals emitter
